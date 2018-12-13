@@ -11,11 +11,6 @@ export default new Router({
       redirect: '/login'
     },
     {
-      path: '/home',
-      name: 'home',
-      component: Home
-    },
-    {
       path: '/login',
       name: 'login',
       component: () => import('./views/Login.vue')
