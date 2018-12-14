@@ -90,7 +90,7 @@ export async function createMap2 () {
   view.ui.remove('attribution')
   // 添加安徽shp
   var featureLayer = new FeatureLayer({
-    url: 'http://localhost:6080/arcgis/rest/services/ah2/MapServer'
+    url: 'http://localhost:6080/arcgis/rest/services/MyMapService/MapServer'
   })
   featureLayer.opacity = 0.5
   map.add(featureLayer)

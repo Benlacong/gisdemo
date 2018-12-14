@@ -8,6 +8,7 @@ import * as esriLoader from 'esri-loader'
 import { createMap } from './esrimap'
 import { createMap2 } from './tdtmap'
 import { area } from './measure'
+import { card } from '@/components/WeatherCard'
 export default {
   data: function () {
     return {
@@ -21,6 +22,7 @@ export default {
     const Fn = async () => {
       await createMap2()
       await area()
+      await card()
     }
     Fn()
   }

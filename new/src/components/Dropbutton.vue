@@ -8,6 +8,7 @@
         <el-dropdown-item id="draw-polygon">测量面积</el-dropdown-item>
         <el-dropdown-item id="draw-line">测量距离</el-dropdown-item>
         <el-dropdown-item @click.native="popupswitch">坐标显示</el-dropdown-item>
+        <el-dropdown-item>实时天气预报</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
 </template>
@@ -15,6 +16,7 @@
 <script>
 import * as esriLoader from 'esri-loader'
 import { area } from './measure'
+import { card } from './WeatherCard'
 export default {
   data: function () {
     return {
