@@ -1,22 +1,23 @@
 <template>
-    <el-dropdown id="tool">
-      <span class="el-dropdown-link" >
-        工具菜单
-        <i class="el-icon-arrow-down el-icon--right"></i>
-      </span>
-      <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item id="draw-polygon">测量面积</el-dropdown-item>
-        <el-dropdown-item id="draw-line">测量距离</el-dropdown-item>
-        <el-dropdown-item @click.native="popupswitch">坐标显示</el-dropdown-item>
-        <el-dropdown-item>实时天气预报</el-dropdown-item>
-      </el-dropdown-menu>
-    </el-dropdown>
+  <el-dropdown id='tool'>
+    <span class='el-dropdown-link'>
+      工具菜单
+      <i class='el-icon-arrow-down el-icon--right'></i>
+    </span>
+    <el-dropdown-menu slot='dropdown'>
+      <el-dropdown-item id='draw-polygon'>测量面积</el-dropdown-item>
+      <el-dropdown-item id='draw-line'>测量距离</el-dropdown-item>
+      <el-dropdown-item @click.native='popupswitch'>坐标显示</el-dropdown-item>
+      <el-dropdown-item @click.native='weatherswitch'>实时天气预报</el-dropdown-item>
+    </el-dropdown-menu>
+  </el-dropdown>
 </template>
 
 <script>
 import * as esriLoader from 'esri-loader'
 import { area } from './measure'
 import { card } from './WeatherCard'
+import * as jsapi from './jsapi'
 export default {
   data: function () {
     return {
@@ -53,6 +54,47 @@ export default {
           view.popup.content = response.address
         })
       })
+    },
+    weatherswitch: async function () {
+      const [IdentifyTask, IdentifyParameters] = await jsapi.load([
+        'esri/tasks/IdentifyTask',
+        'esri/tasks/support/IdentifyParameters'
+      ])
+      var identifyTask, params
+      var ahURL =
+        'http://localhost:6080/arcgis/rest/services/MyMapService/MapServer'
+      identifyTask = new IdentifyTask(ahURL)
+      params = new IdentifyParameters()
+      params.tolerance = 3
+      params.layerOption = 'top'
+      params.width = view.width
+      params.height = view.height
+      var cvue = this
+      view.on('click', event => {
+        params.geometry = event.mapPoint
+        params.mapExtent = view.extent
+        identifyTask.execute(params).then(function (response) {
+          window.results = response.results[0].feature.attributes.LAST_NAME9
+          console.log(results)
+          cvue.a()
+        })
+      })
+    },
+    a () {
+      console.log('111')
+      this.$axios
+        .get('/weather/geo?key=fa89ea037ea05e21fd42af617c2a973f', {
+          params: {
+            cityname: results,
+            format: 1
+          }
+        })
+        .then(function (response) {
+          console.log(response)
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
     }
   },
   mounted () {

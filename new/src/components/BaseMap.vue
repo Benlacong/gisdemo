@@ -5,7 +5,6 @@
 
 <script>
 import * as esriLoader from 'esri-loader'
-import { createMap } from './esrimap'
 import { createMap2 } from './tdtmap'
 import { area } from './measure'
 import { card } from '@/components/WeatherCard'
